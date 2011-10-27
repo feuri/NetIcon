@@ -22,4 +22,4 @@ clean:
 	rm -vfr *~ $(OUTPUT)
 
 install:
-	cp $(OUTPUT) $(DESTDIR)/bin/
+	cp $(OUTPUT) $(DESTDIR)bin/
