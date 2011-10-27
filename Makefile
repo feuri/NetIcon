@@ -8,6 +8,8 @@ VALAC = valac
 
 VALACOPTS = -g
 
+DESTDIR =
+
 # implementation
 
 neticon:
@@ -18,3 +20,6 @@ all:
 	
 clean:
 	rm -vfr *~ $(OUTPUT)
+
+install:
+	cp $(OUTPUT) $(DESTDIR)/bin/
