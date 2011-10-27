@@ -22,5 +22,7 @@ clean:
 	rm -vfr *~ $(OUTPUT)
 
 install:
-	install -D -m755 $(OUTPUT) $(DESTDIR)bin/
-	install -D -m644 LICENSE $(DESTDIR)share/licenses/$(OUTPUT)/
+	install -d $(DESTDIR)usr/bin/
+	install -m755 $(OUTPUT) $(DESTDIR)usr/bin/
+	install -d $(DESTDIR)usr/share/licenses/$(OUTPUT)/
+	install -m644 LICENSE $(DESTDIR)usr/share/licenses/$(OUTPUT)/
