@@ -22,4 +22,5 @@ clean:
 	rm -vfr *~ $(OUTPUT)
 
 install:
-	cp $(OUTPUT) $(DESTDIR)bin/
+	install -D -m755 $(OUTPUT) $(DESTDIR)bin/
+	install -D -m644 LICENSE $(DESTDIR)share/licenses/$(OUTPUT)/
