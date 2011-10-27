@@ -43,8 +43,8 @@ class TrayIcon : Window
     public TrayIcon()
     {
         // Create tray icon
-        trayicon = new StatusIcon.from_icon_name("network-transmit-receive");
-        trayicon.set_tooltip_text("eth0: connected");
+        trayicon = new StatusIcon.from_icon_name("network-offline");
+        trayicon.set_tooltip_text("starting");
         trayicon.set_visible(true);
         
         trayicon.activate.connect(about_clicked);
@@ -93,17 +93,17 @@ class TrayIcon : Window
         about.hide();
     }
 
-    public void update_icon(NetMonitor status)
+    public void update_icon(NetMonitor status, string iface)
     {
         switch(status.net_status)
         {
             case NetMonitor.Status.WIRED_CONNECT:
                 trayicon.set_from_icon_name("network-transmit-receive");
-                trayicon.set_tooltip_text("eth0: connected");
+                trayicon.set_tooltip_text(iface+": connected");
                 break;
             case NetMonitor.Status.WIRED_DISCONNECT:
                 trayicon.set_from_icon_name("network-offline");
-                trayicon.set_tooltip_text("eth0: disconnected");
+                trayicon.set_tooltip_text(iface+": disconnected");
                 break;
             default:
                 break;
