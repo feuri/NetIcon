@@ -44,7 +44,7 @@ class TrayIcon : Window
     {
         // Create tray icon
         trayicon = new StatusIcon.from_icon_name("network-transmit-receive");
-        trayicon.set_tooltip_text("Tray");
+        trayicon.set_tooltip_text("eth0: connected");
         trayicon.set_visible(true);
         
         trayicon.activate.connect(about_clicked);
@@ -99,9 +99,11 @@ class TrayIcon : Window
         {
             case NetMonitor.Status.WIRED_CONNECT:
                 trayicon.set_from_icon_name("network-transmit-receive");
+                trayicon.set_tooltip_text("eth0: connected");
                 break;
             case NetMonitor.Status.WIRED_DISCONNECT:
                 trayicon.set_from_icon_name("network-offline");
+                trayicon.set_tooltip_text("eth0: disconnected");
                 break;
             default:
                 break;
