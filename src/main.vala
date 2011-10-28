@@ -34,8 +34,8 @@ public static int main(string[] args)
     
     var monitor = new NetMonitor(config.conf_iface);
     monitor.monitor_interface();
-    monitor.status_changed.connect(() => {icon.update_icon(monitor, config.conf_iface);});
-    icon.update_icon(monitor, config.conf_iface);
+    monitor.status_changed.connect(() => {icon.update_icon(monitor, config);});
+    icon.update_icon(monitor, config);
     
     Gtk.main();
     

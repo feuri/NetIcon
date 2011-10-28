@@ -20,6 +20,7 @@ class ConfigHandler : Object
 {
     private string config_file;
     public string conf_iface;
+    public InterfaceType iface_type;
     
     public ConfigHandler()
     {
@@ -41,5 +42,11 @@ class ConfigHandler : Object
         {
             stdout.printf("Could not load value: %s\n", e.message);
         }
+    }
+
+    public enum InterfaceType
+    {
+        WIRED,
+        WIRELESS
     }
 }

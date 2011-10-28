@@ -28,11 +28,11 @@ class NetMonitor : Object
         iface = File.new_for_path(state_dir+iface_name);
         if(iface.query_exists())
         {
-            net_status = Status.WIRED_CONNECT;
+            net_status = Status.CONNECT;
         }
         else if(!iface.query_exists())
         {
-            net_status = Status.WIRED_DISCONNECT;
+            net_status = Status.DISCONNECT;
         }
     }
 
@@ -40,14 +40,13 @@ class NetMonitor : Object
     
     enum Status
     {
-        WIRED_CONNECT,
-        WIRED_DISCONNECT,
+        CONNECT,
+        DISCONNECT,
 
-        WIRELESS_CONNECT_100, // Wireless currently unsused, just for later
-        WIRELESS_CONNECT_75,
-        WIRELESS_CONNECT_50,
-        WIRELESS_CONNECT_25,
-        WIRELESS_DISCONNECT,
+        STRENGHT_100,
+        STRENGHT_75, //
+        STRENGHT_50, // Wireless strenght currently unsused, just for later
+        STRENGHT_25, //
 
         ERROR
     }
@@ -69,11 +68,11 @@ class NetMonitor : Object
     {
         if(event == FileMonitorEvent.CREATED)
         {
-            net_status = Status.WIRED_CONNECT;
+            net_status = Status.CONNECT;
         }
         else if(event == FileMonitorEvent.DELETED)
         {
-            net_status = Status.WIRED_DISCONNECT;
+            net_status = Status.DISCONNECT;
         }
         else
         {

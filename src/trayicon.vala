@@ -15,23 +15,6 @@
  * License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-
-/*
- * Icons:
- *
- * LAN
- * up   : network-transmit-receive
- * down : network-offline
- *
- * WLAN 
- *   0% : nm-signal-00
- *  25% : nm-signal-25
- *  50% : nm-signal-50
- *  75% : nm-signal-75
- * 100% : nm-signal-100
- *
- * error: network-error
- */
  
 using Gtk;
 
@@ -93,17 +76,54 @@ class TrayIcon : Window
         about.hide();
     }
 
-    public void update_icon(NetMonitor status, string iface)
+    public void update_icon(NetMonitor status, ConfigHandler conf)
     {
+        /*
+         * Icons:
+         *
+         * CONNECT   /WIRED   : network-transmit-receive
+         * CONNECT   /WIRELESS: nm-signal-100
+         * DISCONNECT/WIRED   : network-offline
+         * DISCONNECT/WIRELESS: nm-signal-00
+         *
+         * WLAN 
+         * STRENGHT_100: nm-signal-100
+         * STRENGHT_75 : nm-signal-75
+         * STRENGHT_50 : nm-signal-50
+         * STRENGHT_25 : nm-signal-25
+         *
+         * ERROR: network-error
+         */
+         
         switch(status.net_status)
         {
-            case NetMonitor.Status.WIRED_CONNECT:
-                trayicon.set_from_icon_name("network-transmit-receive");
-                trayicon.set_tooltip_text(iface+": connected");
+            case NetMonitor.Status.CONNECT:
+                switch(conf.iface_type)
+                {
+                    case ConfigHandler.InterfaceType.WIRED:
+                        trayicon.set_from_icon_name("network-transmit-receive");
+                        break;
+                    case ConfigHandler.InterfaceType.WIRELESS:
+                        trayicon.set_from_icon_name("nm-signal-100");
+                        break;
+                    default:
+                        break;
+                }
+                trayicon.set_tooltip_text(conf.conf_iface+": connected");
                 break;
-            case NetMonitor.Status.WIRED_DISCONNECT:
-                trayicon.set_from_icon_name("network-offline");
-                trayicon.set_tooltip_text(iface+": disconnected");
+            case NetMonitor.Status.DISCONNECT:
+                switch(conf.iface_type)
+                {
+                    case ConfigHandler.InterfaceType.WIRED:
+                        trayicon.set_from_icon_name("network-offline");
+                        break;
+                    case ConfigHandler.InterfaceType.WIRELESS:
+                        trayicon.set_from_icon_name("nm-signal-00");
+                        break;
+                    default:
+                        break;
+                }
+                trayicon.set_tooltip_text(conf.conf_iface+": disconnected");
                 break;
             default:
                 break;
