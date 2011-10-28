@@ -26,6 +26,7 @@ class ConfigHandler : Object
     {
         config_file = Environment.get_user_config_dir()+"/neticon.conf";
         var keyfile = new KeyFile();
+        // Open the Config file
         try
         {
             keyfile.load_from_file(config_file, KeyFileFlags.NONE);
@@ -34,6 +35,7 @@ class ConfigHandler : Object
         {
             stdout.printf("Could not load config file: %s\n", e.message);
         }
+        // Get the contents
         try
         {
             conf_iface = keyfile.get_string("main", "interface");
@@ -41,6 +43,15 @@ class ConfigHandler : Object
         catch(Error e)
         {
             stdout.printf("Could not load value: %s\n", e.message);
+        }
+        // Set InterfaceType
+        if("eth" in conf_iface)
+        {
+            iface_type = InterfaceType.WIRED;
+        }
+        else if("wlan" in conf_iface)
+        {
+            iface_type = InterfaceType.WIRELESS;
         }
     }
 
