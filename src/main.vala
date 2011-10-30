@@ -32,10 +32,10 @@ public static int main(string[] args)
 
     var config = new ConfigHandler();
     
-    var monitor = new NetMonitor(config.conf_iface);
+    var monitor = new NetMonitor(ref config.conf_iface);
     monitor.monitor_interface();
-    monitor.status_changed.connect(() => {icon.update_icon(monitor, config);});
-    icon.update_icon(monitor, config);
+    monitor.status_changed.connect(() => {icon.update_icon(ref monitor, ref config);});
+    icon.update_icon(ref monitor, ref config);
     
     Gtk.main();
     

@@ -76,7 +76,7 @@ class TrayIcon : Window
         about.hide();
     }
 
-    public void update_icon(NetMonitor status, ConfigHandler conf)
+    public void update_icon(ref NetMonitor status, ref ConfigHandler conf)
     {
         /*
          * Icons:

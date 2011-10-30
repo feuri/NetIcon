@@ -23,7 +23,7 @@ class NetMonitor : Object
     private File iface;
     public int net_status;
     
-    public NetMonitor(string iface_name)
+    public NetMonitor(ref string iface_name)
     {
         iface = File.new_for_path(state_dir+iface_name);
         if(iface.query_exists())
