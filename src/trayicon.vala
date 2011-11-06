@@ -40,6 +40,18 @@ class TrayIcon : Window
     public void create_menuSystem()
     {
         menuSystem = new Menu();
+        var submenuConnect = new Menu();
+        create_submenuConnect(submenuConnect);
+        
+        var menuConnect = new MenuItem.with_label("Connect");
+        menuConnect.set_submenu(submenuConnect);
+        menuSystem.append(menuConnect);
+        var menuDisconnect = new MenuItem.with_label("Disconnect");
+        menuDisconnect.activate.connect(disconnect_clicked);
+        menuSystem.append(menuDisconnect);
+        var menuSeparator = new SeparatorMenuItem();
+        menuSystem.append(menuSeparator);
+        
         var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
         menuAbout.activate.connect(about_clicked);
         menuSystem.append(menuAbout);
@@ -47,6 +59,42 @@ class TrayIcon : Window
         menuQuit.activate.connect(Gtk.main_quit);
         menuSystem.append(menuQuit);
         menuSystem.show_all();
+    }
+
+    public void create_submenuConnect(Menu menu)
+    {
+        var last_profile_file = File.new_for_path(state_dir+"last_profile");
+        string last_profile;
+        try
+        {
+            var dis = new DataInputStream (last_profile_file.read ());
+            last_profile = dis.read_line(null);
+            var menuLastProfile = new MenuItem.with_label(last_profile);
+            menuLastProfile.activate.connect(() => {connect_clicked(last_profile);});
+            menu.append(menuLastProfile);
+            var menuSeparator = new SeparatorMenuItem();
+            menu.append(menuSeparator);
+        }
+        catch(Error e)
+        {
+        }
+        
+        string raw_profiles;
+        string[] profiles;
+        try
+        {
+            Process.spawn_command_line_sync("netcfg -l", out raw_profiles);
+        }
+        catch(Error e)
+        {
+        }
+        profiles = raw_profiles.split("\n");
+        for(int i = 0; i < profiles.length-1; i++)
+        {
+            var menuProfile = new MenuItem.with_label(profiles[i]);
+            menuProfile.activate.connect(() => {connect_clicked(profiles[i]);});
+            menu.append(menuProfile);
+        }
     }
 
     // Show popup menu on right button
@@ -74,6 +122,28 @@ class TrayIcon : Window
         about.set_license(license);
         about.run();
         about.hide();
+    }
+
+    private void connect_clicked(string profile)
+    {
+        try
+        {
+            Process.spawn_command_line_sync("gksu netcfg up "+profile);
+        }
+        catch(Error e)
+        {
+        }
+    }
+
+    private void disconnect_clicked()
+    {
+        try
+        {
+            Process.spawn_command_line_sync("gksu netcfg down home-static");
+        }
+        catch(Error e)
+        {
+        }
     }
 
     public void update_icon(ref NetMonitor status, ref ConfigHandler conf)

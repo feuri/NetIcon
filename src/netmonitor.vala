@@ -18,14 +18,15 @@
 
 class NetMonitor : Object
 {
-    private string state_dir = "/run/network/interfaces/";
+//~     private string state_dir = "/run/network/";
+//~     private string profile_dir = "/etc/network.d/";
     private FileMonitor iface_mon;
     private File iface;
     public int net_status;
     
     public NetMonitor(ref string iface_name)
     {
-        iface = File.new_for_path(state_dir+iface_name);
+        iface = File.new_for_path(state_dir+"interfaces/"+iface_name);
         if(iface.query_exists())
         {
             net_status = Status.CONNECT;

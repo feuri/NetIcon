@@ -7,7 +7,7 @@ pkgdesc="A utility to display your current network status in the tray"
 arch=(i686 x86_64)
 url="https://github.com/feuri/NetIcon"
 license=('GPL3')
-depends=('glib2' 'gtk3')
+depends=('glib2' 'gtk3' 'gksu' 'netcfg')
 makedepends=('git' 'vala')
 install=
 

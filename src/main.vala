@@ -23,6 +23,9 @@ const string comments = "A utility to display your current network status in the
 const string copyright = "Copyright (c) 2011 Jonas Jochmaring";
 const string license_file = "/usr/share/licenses/neticon/LICENSE";
 
+const string state_dir = "/run/network/";
+const string profile_dir = "/etc/network.d/";
+
 public static int main(string[] args)
 {
     Gtk.init(ref args);
