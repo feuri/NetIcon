@@ -22,6 +22,7 @@ class TrayIcon : Window
 {
     private StatusIcon trayicon;
     private Menu menuSystem;
+    private string last_profile;
 
     public TrayIcon()
     {
@@ -39,6 +40,16 @@ class TrayIcon : Window
     // Create menu for right button
     public void create_menuSystem()
     {
+        var last_profile_file = File.new_for_path(state_dir+"last_profile");
+        try
+        {
+            var dis = new DataInputStream (last_profile_file.read ());
+            last_profile = dis.read_line(null);
+        }
+        catch(Error e)
+        {
+        }
+        
         menuSystem = new Menu();
         var submenuConnect = new Menu();
         create_submenuConnect(submenuConnect);
@@ -47,7 +58,7 @@ class TrayIcon : Window
         menuConnect.set_submenu(submenuConnect);
         menuSystem.append(menuConnect);
         var menuDisconnect = new MenuItem.with_label("Disconnect");
-        menuDisconnect.activate.connect(disconnect_clicked);
+        menuDisconnect.activate.connect(() => {disconnect_clicked(last_profile);});
         menuSystem.append(menuDisconnect);
         var menuSeparator = new SeparatorMenuItem();
         menuSystem.append(menuSeparator);
@@ -63,27 +74,17 @@ class TrayIcon : Window
 
     public void create_submenuConnect(Menu menu)
     {
-        var last_profile_file = File.new_for_path(state_dir+"last_profile");
-        string last_profile;
-        try
-        {
-            var dis = new DataInputStream (last_profile_file.read ());
-            last_profile = dis.read_line(null);
-            var menuLastProfile = new MenuItem.with_label(last_profile);
-            menuLastProfile.activate.connect(() => {connect_clicked(last_profile);});
-            menu.append(menuLastProfile);
-            var menuSeparator = new SeparatorMenuItem();
-            menu.append(menuSeparator);
-        }
-        catch(Error e)
-        {
-        }
+        var menuLastProfile = new MenuItem.with_label(last_profile);
+        menuLastProfile.activate.connect(() => {connect_clicked(last_profile);});
+        menu.append(menuLastProfile);
+        var menuSeparator = new SeparatorMenuItem();
+        menu.append(menuSeparator);
         
         string raw_profiles;
         string[] profiles;
         try
         {
-            Process.spawn_command_line_sync("netcfg -l", out raw_profiles);
+            Process.spawn_command_line_sync("netcfg list", out raw_profiles);
         }
         catch(Error e)
         {
@@ -135,11 +136,11 @@ class TrayIcon : Window
         }
     }
 
-    private void disconnect_clicked()
+    private void disconnect_clicked(string profile)
     {
         try
         {
-            Process.spawn_command_line_sync("gksu netcfg down home-static");
+            Process.spawn_command_line_sync("gksu netcfg down "+profile);
         }
         catch(Error e)
         {
