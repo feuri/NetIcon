@@ -92,8 +92,9 @@ class TrayIcon : Window
         profiles = raw_profiles.split("\n");
         for(int i = 0; i < profiles.length-1; i++)
         {
-            var menuProfile = new MenuItem.with_label(profiles[i]);
-            menuProfile.activate.connect(() => {connect_clicked(profiles[i]);});
+            string current_profile = profiles[i];
+            var menuProfile = new MenuItem.with_label(current_profile);
+            menuProfile.activate.connect(() => {connect_clicked(current_profile);});
             menu.append(menuProfile);
         }
     }
