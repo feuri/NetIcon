@@ -81,9 +81,9 @@ class TrayIcon : Window
         /*
          * Icons:
          *
-         * CONNECT   /WIRED   : network-transmit-receive
+         * CONNECT   /WIRED   : nm-device-wired
          * CONNECT   /WIRELESS: nm-signal-100
-         * DISCONNECT/WIRED   : network-offline
+         * DISCONNECT/WIRED   : nm-no-connection
          * DISCONNECT/WIRELESS: nm-signal-00
          *
          * WLAN 
@@ -101,7 +101,7 @@ class TrayIcon : Window
                 switch(conf.iface_type)
                 {
                     case ConfigHandler.InterfaceType.WIRED:
-                        trayicon.set_from_icon_name("network-transmit-receive");
+                        trayicon.set_from_icon_name("nm-device-wired");
                         break;
                     case ConfigHandler.InterfaceType.WIRELESS:
                         trayicon.set_from_icon_name("nm-signal-100");
@@ -115,7 +115,7 @@ class TrayIcon : Window
                 switch(conf.iface_type)
                 {
                     case ConfigHandler.InterfaceType.WIRED:
-                        trayicon.set_from_icon_name("network-offline");
+                        trayicon.set_from_icon_name("nm-no-connection");
                         break;
                     case ConfigHandler.InterfaceType.WIRELESS:
                         trayicon.set_from_icon_name("nm-signal-00");
