@@ -18,7 +18,7 @@
 
 class NetMonitor : Object
 {
-    private string state_dir = "/var/run/network/interfaces/";
+    private string state_dir = "/run/network/interfaces/";
     private FileMonitor iface_mon;
     private File iface;
     public int net_status;
