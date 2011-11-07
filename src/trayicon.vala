@@ -60,6 +60,15 @@ class TrayIcon : Window
         var menuDisconnect = new MenuItem.with_label("Disconnect");
         menuDisconnect.activate.connect(() => {disconnect_clicked(last_profile);});
         menuSystem.append(menuDisconnect);
+        var menuReconnect = new MenuItem.with_label("Reconnect");
+        menuReconnect.activate.connect(reconnect_clicked);
+        menuSystem.append(menuReconnect);
+        var menuSuspend = new MenuItem.with_label("Suspend");
+        menuSuspend.activate.connect(suspend_clicked);
+        menuSystem.append(menuSuspend);
+        var menuResume = new MenuItem.with_label("Resume");
+        menuResume.activate.connect(resume_clicked);
+        menuSystem.append(menuResume);
         var menuSeparator = new SeparatorMenuItem();
         menuSystem.append(menuSeparator);
         
@@ -142,6 +151,39 @@ class TrayIcon : Window
         try
         {
             Process.spawn_command_line_sync("gksu netcfg down "+profile);
+        }
+        catch(Error e)
+        {
+        }
+    }
+
+    private void reconnect_clicked()
+    {
+        try
+        {
+            Process.spawn_command_line_sync("gksu netcfg reconnect");
+        }
+        catch(Error e)
+        {
+        }
+    }
+
+    private void suspend_clicked()
+    {
+        try
+        {
+            Process.spawn_command_line_sync("gksu netcfg all-suspend");
+        }
+        catch(Error e)
+        {
+        }
+    }
+
+    private void resume_clicked()
+    {
+        try
+        {
+            Process.spawn_command_line_sync("gksu netcfg all-resume");
         }
         catch(Error e)
         {
