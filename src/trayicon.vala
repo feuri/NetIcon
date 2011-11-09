@@ -54,19 +54,19 @@ class TrayIcon : Window
         var submenuConnect = new Menu();
         create_submenuConnect(submenuConnect);
         
-        var menuConnect = new MenuItem.with_label("Connect");
+        var menuConnect = new MenuItem.with_mnemonic("_Connect");
         menuConnect.set_submenu(submenuConnect);
         menuSystem.append(menuConnect);
-        var menuDisconnect = new MenuItem.with_label("Disconnect");
+        var menuDisconnect = new MenuItem.with_mnemonic("_Disconnect");
         menuDisconnect.activate.connect(() => {disconnect_clicked(last_profile);});
         menuSystem.append(menuDisconnect);
-        var menuReconnect = new MenuItem.with_label("Reconnect");
+        var menuReconnect = new MenuItem.with_mnemonic("_Reconnect");
         menuReconnect.activate.connect(reconnect_clicked);
         menuSystem.append(menuReconnect);
-        var menuSuspend = new MenuItem.with_label("Suspend");
+        var menuSuspend = new MenuItem.with_mnemonic("_Suspend");
         menuSuspend.activate.connect(suspend_clicked);
         menuSystem.append(menuSuspend);
-        var menuResume = new MenuItem.with_label("Resume");
+        var menuResume = new MenuItem.with_mnemonic("R_esume");
         menuResume.activate.connect(resume_clicked);
         menuSystem.append(menuResume);
         var menuSeparator = new SeparatorMenuItem();
