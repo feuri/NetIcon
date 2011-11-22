@@ -1,4 +1,5 @@
-/**
+/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/*
  * (C) Copyright 2011 Jonas Jochmaring
  *
  * This program is free software; you can redistribute it and/or modify
@@ -40,10 +41,10 @@ class TrayIcon : Window
     // Create menu for right button
     public void create_menuSystem()
     {
-        var last_profile_file = File.new_for_path(state_dir+"last_profile");
+        var last_profile_file = File.new_for_path(STATE_DIR+"last_profile");
         try
         {
-            var dis = new DataInputStream (last_profile_file.read ());
+            var dis = new DataInputStream(last_profile_file.read ());
             last_profile = dis.read_line(null);
         }
         catch(Error e)
@@ -86,8 +87,8 @@ class TrayIcon : Window
         var menuLastProfile = new MenuItem.with_label(last_profile);
         menuLastProfile.activate.connect(() => {connect_clicked(last_profile);});
         menu.append(menuLastProfile);
-        var menuSeparator = new SeparatorMenuItem();
-        menu.append(menuSeparator);
+        var menuSeparator1 = new SeparatorMenuItem();
+        menu.append(menuSeparator1);
         
         string raw_profiles;
         string[] profiles;
@@ -106,6 +107,11 @@ class TrayIcon : Window
             menuProfile.activate.connect(() => {connect_clicked(current_profile);});
             menu.append(menuProfile);
         }
+        var menuSeparator2 = new SeparatorMenuItem();
+        menu.append(menuSeparator2);
+        var menuProfileCreator = new MenuItem.with_label("Create a new Profile");
+		menuProfileCreator.activate.connect(() => {new ProfileCreator();});
+        menu.append(menuProfileCreator);
     }
 
     // Show popup menu on right button
@@ -117,14 +123,14 @@ class TrayIcon : Window
     private void about_clicked()
     {
         var about = new AboutDialog();
-        about.set_program_name(program_name);
-        about.set_version(version);
-        about.set_comments(comments);
-        about.set_copyright(copyright);
+        about.set_program_name(PROGRAM_NAME);
+        about.set_version(VERSION);
+        about.set_comments(COMMENTS);
+        about.set_copyright(COPYRIGHT);
         string license;
         try
         {
-            FileUtils.get_contents(license_file, out license);
+            FileUtils.get_contents(LICENSE_FILE, out license);
         }
         catch(Error e)
         {

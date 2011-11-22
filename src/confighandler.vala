@@ -1,4 +1,5 @@
-/**
+/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/*
  * (C) Copyright 2011 Jonas Jochmaring
  *
  * This program is free software; you can redistribute it and/or modify

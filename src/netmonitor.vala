@@ -1,4 +1,5 @@
-/**
+/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/*
  * (C) Copyright 2011 Jonas Jochmaring
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,7 +27,7 @@ class NetMonitor : Object
     
     public NetMonitor(ref string iface_name)
     {
-        iface = File.new_for_path(state_dir+"interfaces/"+iface_name);
+        iface = File.new_for_path(STATE_DIR+"interfaces/"+iface_name);
         if(iface.query_exists())
         {
             net_status = Status.CONNECT;
