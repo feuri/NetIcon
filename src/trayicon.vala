@@ -19,185 +19,157 @@
  
 using Gtk;
 
-class TrayIcon : Window
-{
+class TrayIcon : Window {
     private StatusIcon trayicon;
     private Menu menuSystem;
     private string last_profile;
 
-    public TrayIcon()
-    {
+    public TrayIcon () {
         // Create tray icon
-        trayicon = new StatusIcon.from_icon_name("network-offline");
-        trayicon.set_tooltip_text("starting");
-        trayicon.set_visible(true);
+        trayicon = new StatusIcon.from_icon_name ("network-offline");
+        trayicon.set_tooltip_text ("starting");
+        trayicon.set_visible (true);
         
-        trayicon.activate.connect(about_clicked);
+        trayicon.activate.connect (about_clicked);
         
-        create_menuSystem();
-        trayicon.popup_menu.connect(menuSystem_popup);
+        create_menuSystem ();
+        trayicon.popup_menu.connect (menuSystem_popup);
     }
 
     // Create menu for right button
-    public void create_menuSystem()
-    {
-        var last_profile_file = File.new_for_path(STATE_DIR+"last_profile");
-        try
-        {
-            var dis = new DataInputStream(last_profile_file.read ());
-            last_profile = dis.read_line(null);
-        }
-        catch(Error e)
-        {
+    public void create_menuSystem () {
+        var last_profile_file = File.new_for_path (STATE_DIR + "last_profile");
+        try {
+            var dis = new DataInputStream (last_profile_file.read ());
+            last_profile = dis.read_line (null);
+        } catch (Error e) {
         }
         
-        menuSystem = new Menu();
-        var submenuConnect = new Menu();
-        create_submenuConnect(submenuConnect);
+        menuSystem = new Menu ();
+        var submenuConnect = new Menu ();
+        create_submenuConnect (submenuConnect);
         
-        var menuConnect = new MenuItem.with_mnemonic("_Connect");
-        menuConnect.set_submenu(submenuConnect);
-        menuSystem.append(menuConnect);
-        var menuDisconnect = new MenuItem.with_mnemonic("_Disconnect");
-        menuDisconnect.activate.connect(() => {disconnect_clicked(last_profile);});
-        menuSystem.append(menuDisconnect);
-        var menuReconnect = new MenuItem.with_mnemonic("_Reconnect");
-        menuReconnect.activate.connect(reconnect_clicked);
-        menuSystem.append(menuReconnect);
-        var menuSuspend = new MenuItem.with_mnemonic("_Suspend");
-        menuSuspend.activate.connect(suspend_clicked);
-        menuSystem.append(menuSuspend);
-        var menuResume = new MenuItem.with_mnemonic("R_esume");
-        menuResume.activate.connect(resume_clicked);
-        menuSystem.append(menuResume);
-        var menuSeparator = new SeparatorMenuItem();
-        menuSystem.append(menuSeparator);
+        var menuConnect = new MenuItem.with_mnemonic ("_Connect");
+        menuConnect.set_submenu (submenuConnect);
+        menuSystem.append (menuConnect);
+        var menuDisconnect = new MenuItem.with_mnemonic ("_Disconnect");
+        menuDisconnect.activate.connect(() => {
+			disconnect_clicked(last_profile);
+		});
+        menuSystem.append (menuDisconnect);
+        var menuReconnect = new MenuItem.with_mnemonic ("_Reconnect");
+        menuReconnect.activate.connect (reconnect_clicked);
+        menuSystem.append (menuReconnect);
+        var menuSuspend = new MenuItem.with_mnemonic ("_Suspend");
+        menuSuspend.activate.connect (suspend_clicked);
+        menuSystem.append (menuSuspend);
+        var menuResume = new MenuItem.with_mnemonic ("R_esume");
+        menuResume.activate.connect (resume_clicked);
+        menuSystem.append (menuResume);
+        var menuSeparator = new SeparatorMenuItem ();
+        menuSystem.append (menuSeparator);
         
-        var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
-        menuAbout.activate.connect(about_clicked);
-        menuSystem.append(menuAbout);
-        var menuQuit = new ImageMenuItem.from_stock(Stock.QUIT, null);
-        menuQuit.activate.connect(Gtk.main_quit);
-        menuSystem.append(menuQuit);
-        menuSystem.show_all();
+        var menuAbout = new ImageMenuItem.from_stock (Stock.ABOUT, null);
+        menuAbout.activate.connect (about_clicked);
+        menuSystem.append (menuAbout);
+        var menuQuit = new ImageMenuItem.from_stock (Stock.QUIT, null);
+        menuQuit.activate.connect (Gtk.main_quit);
+        menuSystem.append (menuQuit);
+        menuSystem.show_all ();
     }
 
-    public void create_submenuConnect(Menu menu)
-    {
-        var menuLastProfile = new MenuItem.with_label(last_profile);
-        menuLastProfile.activate.connect(() => {connect_clicked(last_profile);});
-        menu.append(menuLastProfile);
-        var menuSeparator1 = new SeparatorMenuItem();
-        menu.append(menuSeparator1);
+    public void create_submenuConnect (Menu menu) {
+        var menuLastProfile = new MenuItem.with_label (last_profile);
+        menuLastProfile.activate.connect (() => {
+			connect_clicked (last_profile);
+		});
+        menu.append (menuLastProfile);
+        var menuSeparator1 = new SeparatorMenuItem ();
+        menu.append (menuSeparator1);
         
         string raw_profiles;
         string[] profiles;
-        try
-        {
+        try {
             Process.spawn_command_line_sync("netcfg list", out raw_profiles);
+        } catch (Error e) {
         }
-        catch(Error e)
-        {
-        }
-        profiles = raw_profiles.split("\n");
-        for(int i = 0; i < profiles.length-1; i++)
-        {
+        profiles = raw_profiles.split ("\n");
+        for (int i = 0; i < profiles.length-1; i++) {
             string current_profile = profiles[i];
-            var menuProfile = new MenuItem.with_label(current_profile);
-            menuProfile.activate.connect(() => {connect_clicked(current_profile);});
-            menu.append(menuProfile);
+            var menuProfile = new MenuItem.with_label (current_profile);
+            menuProfile.activate.connect(() => {
+				connect_clicked (current_profile);
+			});
+            menu.append (menuProfile);
         }
-        var menuSeparator2 = new SeparatorMenuItem();
-        menu.append(menuSeparator2);
-        var menuProfileCreator = new MenuItem.with_label("Create a new Profile");
-		menuProfileCreator.activate.connect(() => {new ProfileCreator();});
-        menu.append(menuProfileCreator);
+        var menuSeparator2 = new SeparatorMenuItem ();
+        menu.append (menuSeparator2);
+        var menuProfileCreator = new MenuItem.with_label ("Create a new Profile");
+		menuProfileCreator.activate.connect (() => {
+			new ProfileCreator ();
+		});
+        menu.append (menuProfileCreator);
     }
 
     // Show popup menu on right button
-    private void menuSystem_popup(uint button, uint time)
-    {
-        menuSystem.popup(null, null, null, button, time);
+    private void menuSystem_popup (uint button, uint time) {
+        menuSystem.popup (null, null, null, button, time);
     }
 
-    private void about_clicked()
+    private void about_clicked ()
     {
-        var about = new AboutDialog();
-        about.set_program_name(PROGRAM_NAME);
-        about.set_version(VERSION);
-        about.set_comments(COMMENTS);
-        about.set_copyright(COPYRIGHT);
+        var about = new AboutDialog ();
+        about.set_program_name (PROGRAM_NAME);
+        about.set_version (VERSION);
+        about.set_comments (COMMENTS);
+        about.set_copyright (COPYRIGHT);
         string license;
-        try
-        {
-            FileUtils.get_contents(LICENSE_FILE, out license);
+        try {
+            FileUtils.get_contents (LICENSE_FILE, out license);
+        } catch(Error e) {
+            license = "Error opening the license file: " + e.message;
         }
-        catch(Error e)
-        {
-            license = "Error opening the license file: "+e.message;
-        }
-        about.set_license(license);
-        about.run();
-        about.hide();
+        about.set_license (license);
+        about.run ();
+        about.hide ();
     }
 
-    private void connect_clicked(string profile)
-    {
-        try
-        {
-            Process.spawn_command_line_sync("gksu netcfg up "+profile);
-        }
-        catch(Error e)
-        {
+    private void connect_clicked (string profile) {
+        try {
+            Process.spawn_command_line_sync ("gksu netcfg up "+profile);
+        } catch (Error e) {
         }
     }
 
-    private void disconnect_clicked(string profile)
-    {
-        try
-        {
-            Process.spawn_command_line_sync("gksu netcfg down "+profile);
-        }
-        catch(Error e)
-        {
+    private void disconnect_clicked (string profile) {
+        try {
+            Process.spawn_command_line_sync ("gksu netcfg down "+profile);
+        } catch (Error e) {
         }
     }
 
-    private void reconnect_clicked()
-    {
-        try
-        {
-            Process.spawn_command_line_sync("gksu netcfg reconnect");
-        }
-        catch(Error e)
-        {
+    private void reconnect_clicked () {
+        try {
+            Process.spawn_command_line_sync ("gksu netcfg reconnect");
+        } catch (Error e) {
         }
     }
 
-    private void suspend_clicked()
-    {
-        try
-        {
-            Process.spawn_command_line_sync("gksu netcfg all-suspend");
-        }
-        catch(Error e)
-        {
+    private void suspend_clicked () {
+        try {
+            Process.spawn_command_line_sync ("gksu netcfg all-suspend");
+        } catch (Error e) {
         }
     }
 
-    private void resume_clicked()
-    {
-        try
-        {
-            Process.spawn_command_line_sync("gksu netcfg all-resume");
-        }
-        catch(Error e)
-        {
+    private void resume_clicked () {
+        try {
+            Process.spawn_command_line_sync ("gksu netcfg all-resume");
+        } catch (Error e) {
         }
     }
 
-    public void update_icon(ref NetMonitor status, ref ConfigHandler conf)
-    {
+    public void update_icon (ref NetMonitor status, ref ConfigHandler conf) {
         /*
          * Icons:
          *
@@ -215,35 +187,32 @@ class TrayIcon : Window
          * ERROR: network-error
          */
          
-        switch(status.net_status)
-        {
+        switch (status.net_status) {
             case NetMonitor.Status.CONNECT:
-                switch(conf.iface_type)
-                {
+                switch (conf.iface_type) {
                     case ConfigHandler.InterfaceType.WIRED:
-                        trayicon.set_from_icon_name("nm-device-wired");
+                        trayicon.set_from_icon_name ("nm-device-wired");
                         break;
                     case ConfigHandler.InterfaceType.WIRELESS:
-                        trayicon.set_from_icon_name("nm-signal-100");
+                        trayicon.set_from_icon_name ("nm-signal-100");
                         break;
                     default:
                         break;
                 }
-                trayicon.set_tooltip_text(conf.conf_iface+": connected");
+                trayicon.set_tooltip_text (conf.conf_iface + ": connected");
                 break;
             case NetMonitor.Status.DISCONNECT:
-                switch(conf.iface_type)
-                {
+                switch (conf.iface_type) {
                     case ConfigHandler.InterfaceType.WIRED:
-                        trayicon.set_from_icon_name("nm-no-connection");
+                        trayicon.set_from_icon_name ("nm-no-connection");
                         break;
                     case ConfigHandler.InterfaceType.WIRELESS:
-                        trayicon.set_from_icon_name("nm-signal-00");
+                        trayicon.set_from_icon_name ("nm-signal-00");
                         break;
                     default:
                         break;
                 }
-                trayicon.set_tooltip_text(conf.conf_iface+": disconnected");
+                trayicon.set_tooltip_text (conf.conf_iface + ": disconnected");
                 break;
             default:
                 break;

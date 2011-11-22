@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-// For the about dialog
+// about dialog
 const string PROGRAM_NAME = "NetIcon";
 const string VERSION = "0.0.1";
 const string COMMENTS = "A utility to display your current network status in the tray";
@@ -27,21 +27,22 @@ const string LICENSE_FILE = "/usr/share/licenses/neticon/LICENSE";
 const string STATE_DIR = "/run/network/";
 const string PROFILE_DIR = "/etc/network.d/";
 
-public static int main(string[] args)
-{
-    Gtk.init(ref args);
+public static int main (string[] args) {
+    Gtk.init (ref args);
     
-    var icon = new TrayIcon();
-    icon.hide();
+    var icon = new TrayIcon ();
+    icon.hide ();
 
-    var config = new ConfigHandler();
+    var config = new ConfigHandler ();
     
-    var monitor = new NetMonitor(ref config.conf_iface);
-    monitor.monitor_interface();
-    monitor.status_changed.connect(() => {icon.update_icon(ref monitor, ref config);});
-    icon.update_icon(ref monitor, ref config);
+    var monitor = new NetMonitor (ref config.conf_iface);
+    monitor.monitor_interface ();
+    monitor.status_changed.connect (() => {
+		icon.update_icon(ref monitor, ref config);
+	});
+    icon.update_icon (ref monitor, ref config);
     
-    Gtk.main();
+    Gtk.main ();
     
     return 0;
 }

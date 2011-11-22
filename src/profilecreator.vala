@@ -19,25 +19,23 @@
 
 using Gtk;
 
-class ProfileCreator : Window
-{
+class ProfileCreator : Window {
     private Window window;
     
-    public ProfileCreator()
-    {
-        window = new Window();
+    public ProfileCreator () {
+        window = new Window ();
         window.title = "ProfileCreator";
         window.border_width = 10;
         window.window_position = WindowPosition.CENTER;
-        window.set_default_size(350, 70);
-        window.destroy.connect(Gtk.main_quit);
+        window.set_default_size (350, 70);
+        window.destroy.connect (Gtk.main_quit);
 
-        var button = new Button.with_label("OK");
-        button.clicked.connect(Gtk.main_quit);
+        var button = new Button.with_label ("OK");
+        button.clicked.connect (Gtk.main_quit);
 
-        window.add(button);
-        window.show_all();
+        window.add (button);
+        window.show_all ();
 
-		Gtk.main();
+		Gtk.main ();
     }
 }

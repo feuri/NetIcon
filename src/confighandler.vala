@@ -17,47 +17,35 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-class ConfigHandler : Object
-{
+class ConfigHandler : Object {
     private string config_file;
     public string conf_iface;
     public InterfaceType iface_type;
     
-    public ConfigHandler()
-    {
-        config_file = Environment.get_user_config_dir()+"/neticon.conf";
-        var keyfile = new KeyFile();
+    public ConfigHandler () {
+        config_file = Environment.get_user_config_dir () + "/neticon.conf";
+        var keyfile = new KeyFile ();
         // Open the Config file
-        try
-        {
-            keyfile.load_from_file(config_file, KeyFileFlags.NONE);
-        }
-        catch(Error e)
-        {
-            stdout.printf("Could not load config file: %s\n", e.message);
+        try {
+            keyfile.load_from_file (config_file, KeyFileFlags.NONE);
+        } catch (Error e) {
+            stdout.printf ("Could not load config file: %s\n", e.message);
         }
         // Get the contents
-        try
-        {
-            conf_iface = keyfile.get_string("main", "interface");
-        }
-        catch(Error e)
-        {
-            stdout.printf("Could not load value: %s\n", e.message);
+        try {
+            conf_iface = keyfile.get_string ("main", "interface");
+        } catch (Error e) {
+            stdout.printf ("Could not load value: %s\n", e.message);
         }
         // Set InterfaceType
-        if("eth" in conf_iface)
-        {
+        if ("eth" in conf_iface) {
             iface_type = InterfaceType.WIRED;
-        }
-        else if("wlan" in conf_iface)
-        {
+        } else if ("wlan" in conf_iface) {
             iface_type = InterfaceType.WIRELESS;
         }
     }
 
-    public enum InterfaceType
-    {
+    public enum InterfaceType {
         WIRED,
         WIRELESS
     }

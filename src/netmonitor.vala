@@ -17,31 +17,23 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-class NetMonitor : Object
-{
-//~     private string state_dir = "/run/network/";
-//~     private string profile_dir = "/etc/network.d/";
+class NetMonitor : Object {
     private FileMonitor iface_mon;
     private File iface;
     public int net_status;
     
-    public NetMonitor(ref string iface_name)
-    {
-        iface = File.new_for_path(STATE_DIR+"interfaces/"+iface_name);
-        if(iface.query_exists())
-        {
+    public NetMonitor (ref string iface_name) {
+        iface = File.new_for_path (STATE_DIR + "interfaces/" + iface_name);
+        if (iface.query_exists ()) {
             net_status = Status.CONNECT;
-        }
-        else if(!iface.query_exists())
-        {
+        } else if (!iface.query_exists()) {
             net_status = Status.DISCONNECT;
         }
     }
 
-    public signal void status_changed();
+    public signal void status_changed ();
     
-    enum Status
-    {
+    enum Status {
         CONNECT,
         DISCONNECT,
 
@@ -53,33 +45,23 @@ class NetMonitor : Object
         ERROR
     }
 
-    public void monitor_interface()
-    {
-        try
-        {
-            iface_mon = iface.monitor_file(FileMonitorFlags.NONE);
-            iface_mon.changed.connect(on_change);
-        }
-        catch(Error e)
-        {
-            stdout.printf("Error: %s\n", e.message);
+    public void monitor_interface () {
+        try {
+            iface_mon = iface.monitor_file (FileMonitorFlags.NONE);
+            iface_mon.changed.connect (on_change);
+        } catch(Error e) {
+            stdout.printf ("Error: %s\n", e.message);
         }
     }
 
-    public void on_change(File file, File? other_file, FileMonitorEvent event)
-    {
-        if(event == FileMonitorEvent.CREATED)
-        {
+    public void on_change (File file, File? other_file, FileMonitorEvent event) {
+        if (event == FileMonitorEvent.CREATED) {
             net_status = Status.CONNECT;
-        }
-        else if(event == FileMonitorEvent.DELETED)
-        {
+        } else if (event == FileMonitorEvent.DELETED) {
             net_status = Status.DISCONNECT;
+        } else {
+            //stdout.printf ("Error: unused event\n");
         }
-        else
-        {
-            //stdout.printf("Error: unused event\n");
-        }
-        status_changed();
+        status_changed ();
     }
 }
