@@ -1,4 +1,5 @@
-/**
+/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/*
  * (C) Copyright 2011 Jonas Jochmaring
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,14 +18,14 @@
  */
 
 // For the about dialog
-const string program_name = "NetIcon";
-const string version = "0.0.1";
-const string comments = "A utility to display your current network status in the tray";
-const string copyright = "Copyright (c) 2011 Jonas Jochmaring";
-const string license_file = "/usr/share/licenses/neticon/LICENSE";
+const string PROGRAM_NAME = "NetIcon";
+const string VERSION = "0.0.1";
+const string COMMENTS = "A utility to display your current network status in the tray";
+const string COPYRIGHT = "Copyright (c) 2011 Jonas Jochmaring";
+const string LICENSE_FILE = "/usr/share/licenses/neticon/LICENSE";
 
-const string state_dir = "/run/network/";
-const string profile_dir = "/etc/network.d/";
+const string STATE_DIR = "/run/network/";
+const string PROFILE_DIR = "/etc/network.d/";
 
 public static int main(string[] args)
 {
