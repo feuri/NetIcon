@@ -1,4 +1,4 @@
-SRC = src/main.vala src/trayicon.vala src/netmonitor.vala src/confighandler.vala
+SRC = src/neticon.vala src/trayicon.vala src/netmonitor.vala src/confighandler.vala
 
 OUTPUT = neticon
 

@@ -49,7 +49,6 @@ class TrayIcon : Window {
         var submenuConnect = new Menu ();
         create_submenuConnect (submenuConnect);
         
-<<<<<<< HEAD
         var menuConnect = new MenuItem.with_mnemonic ("_Connect");
         menuConnect.set_submenu (submenuConnect);
         menuSystem.append (menuConnect);
@@ -69,26 +68,7 @@ class TrayIcon : Window {
         menuSystem.append (menuResume);
         var menuSeparator = new SeparatorMenuItem ();
         menuSystem.append (menuSeparator);
-=======
-        var menuConnect = new MenuItem.with_label("Connect");
-        menuConnect.set_submenu(submenuConnect);
-        menuSystem.append(menuConnect);
-        var menuDisconnect = new MenuItem.with_label("Disconnect");
-        menuDisconnect.activate.connect(() => {disconnect_clicked(last_profile);});
-        menuSystem.append(menuDisconnect);
-        var menuReconnect = new MenuItem.with_label("Reconnect");
-        menuReconnect.activate.connect(reconnect_clicked);
-        menuSystem.append(menuReconnect);
-        var menuSuspend = new MenuItem.with_label("Suspend");
-        menuSuspend.activate.connect(suspend_clicked);
-        menuSystem.append(menuSuspend);
-        var menuResume = new MenuItem.with_label("Resume");
-        menuResume.activate.connect(resume_clicked);
-        menuSystem.append(menuResume);
-        var menuSeparator = new SeparatorMenuItem();
-        menuSystem.append(menuSeparator);
->>>>>>> parent of 6b6136a... using mnemonic MenuItems now
-        
+
         var menuAbout = new ImageMenuItem.from_stock (Stock.ABOUT, null);
         menuAbout.activate.connect (about_clicked);
         menuSystem.append (menuAbout);
@@ -122,13 +102,6 @@ class TrayIcon : Window {
 			});
             menu.append (menuProfile);
         }
-        var menuSeparator2 = new SeparatorMenuItem ();
-        menu.append (menuSeparator2);
-        var menuProfileCreator = new MenuItem.with_label ("Create a new Profile");
-		menuProfileCreator.activate.connect (() => {
-			new ProfileCreator ();
-		});
-        menu.append (menuProfileCreator);
     }
 
     // Show popup menu on right button
